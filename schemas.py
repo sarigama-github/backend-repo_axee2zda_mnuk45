@@ -11,38 +11,41 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl, EmailStr
+from typing import Optional, List
 
-# Example schemas (replace with your own):
-
-class User(BaseModel):
+class Company(BaseModel):
     """
-    Users collection schema
-    Collection name: "user" (lowercase of class name)
+    Company profile schema
+    Collection name: "company"
     """
-    name: str = Field(..., description="Full name")
-    email: str = Field(..., description="Email address")
-    address: str = Field(..., description="Address")
-    age: Optional[int] = Field(None, ge=0, le=120, description="Age in years")
-    is_active: bool = Field(True, description="Whether user is active")
+    name: str = Field(..., description="Company name")
+    tagline: Optional[str] = Field(None, description="Short tagline")
+    description: Optional[str] = Field(None, description="About the company")
+    mission: Optional[str] = Field(None, description="Company mission")
+    vision: Optional[str] = Field(None, description="Company vision")
+    website: Optional[HttpUrl] = Field(None, description="Website URL")
+    email: Optional[EmailStr] = Field(None, description="Contact email")
+    phone: Optional[str] = Field(None, description="Contact phone")
+    address: Optional[str] = Field(None, description="Address")
+    logo_url: Optional[HttpUrl] = Field(None, description="Logo URL")
 
-class Product(BaseModel):
+class ProductApp(BaseModel):
     """
-    Products collection schema
-    Collection name: "product" (lowercase of class name)
+    Product apps schema
+    Collection name: "productapp"
     """
-    title: str = Field(..., description="Product title")
-    description: Optional[str] = Field(None, description="Product description")
-    price: float = Field(..., ge=0, description="Price in dollars")
-    category: str = Field(..., description="Product category")
-    in_stock: bool = Field(True, description="Whether product is in stock")
+    name: str = Field(..., description="Product/app name")
+    short_description: Optional[str] = Field(None, description="Brief description")
+    category: Optional[str] = Field(None, description="Category or type")
+    pricing: Optional[str] = Field(None, description="Pricing info")
+    website: Optional[HttpUrl] = Field(None, description="Product URL")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Document(BaseModel):
+    """
+    Intelligent document schema
+    Collection name: "document"
+    """
+    title: str = Field(..., description="Document title")
+    content: str = Field(..., description="Raw text content of the document")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Tags for the document")
